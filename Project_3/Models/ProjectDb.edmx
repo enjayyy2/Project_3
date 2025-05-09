@@ -1,0 +1,352 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="mydatabase3Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Cart">
+          <Key>
+            <PropertyRef Name="id_Cart" />
+          </Key>
+          <Property Name="id_Cart" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="username_customer" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ProductCode" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Quantity" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="id_Customer" />
+          </Key>
+          <Property Name="id_Customer" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="email_customer" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="username_customer" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="password_customer" Type="varchar" MaxLength="255" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="id_Employee" />
+          </Key>
+          <Property Name="id_Employee" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="email_employee" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="username_employee" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="password_employee" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="akses" Type="varchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="ProductCode" />
+          </Key>
+          <Property Name="ProductCode" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="ProductName" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="ProductPrice" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="ProductStock" Type="int" Nullable="false" />
+          <Property Name="ProductImage" Type="varchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="Product_Transaksi">
+          <Key>
+            <PropertyRef Name="id_ProductTransaksi" />
+          </Key>
+          <Property Name="id_ProductTransaksi" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="username_customer" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ProductCode" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Quantity" Type="int" Nullable="false" />
+          <Property Name="date_time" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Transaksi">
+          <Key>
+            <PropertyRef Name="id_Transaksi" />
+          </Key>
+          <Property Name="id_Transaksi" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="username_customer" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ProductCode" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Quantity" Type="int" Nullable="false" />
+          <Property Name="SubTotal" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="date_time" Type="datetime" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__Cart__ProductCod__4316F928">
+          <End Role="Product" Type="Self.Product" Multiplicity="1" />
+          <End Role="Cart" Type="Self.Cart" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="ProductCode" />
+            </Principal>
+            <Dependent Role="Cart">
+              <PropertyRef Name="ProductCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <!--Errors Found During Generation:
+warning 6035: The relationship 'FK__Cart__username_c__4222D4EF' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
+        <Association Name="FK__Cart__username_c__4222D4EF" />-->
+        <Association Name="FK__Product_T__Produ__47DBAE45">
+          <End Role="Product" Type="Self.Product" Multiplicity="1" />
+          <End Role="Product_Transaksi" Type="Self.Product_Transaksi" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="ProductCode" />
+            </Principal>
+            <Dependent Role="Product_Transaksi">
+              <PropertyRef Name="ProductCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <!--Errors Found During Generation:
+warning 6035: The relationship 'FK__Product_T__usern__46E78A0C' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
+        <Association Name="FK__Product_T__usern__46E78A0C" />-->
+        <Association Name="FK__Transaksi__Produ__4CA06362">
+          <End Role="Product" Type="Self.Product" Multiplicity="1" />
+          <End Role="Transaksi" Type="Self.Transaksi" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="ProductCode" />
+            </Principal>
+            <Dependent Role="Transaksi">
+              <PropertyRef Name="ProductCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <!--Errors Found During Generation:
+warning 6035: The relationship 'FK__Transaksi__usern__4BAC3F29' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
+        <Association Name="FK__Transaksi__usern__4BAC3F29" />-->
+        <EntityContainer Name="mydatabase3ModelStoreContainer">
+          <EntitySet Name="Cart" EntityType="Self.Cart" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Employee" EntityType="Self.Employee" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Product_Transaksi" EntityType="Self.Product_Transaksi" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Transaksi" EntityType="Self.Transaksi" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Cart__ProductCod__4316F928" Association="Self.FK__Cart__ProductCod__4316F928">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="Cart" EntitySet="Cart" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Product_T__Produ__47DBAE45" Association="Self.FK__Product_T__Produ__47DBAE45">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="Product_Transaksi" EntitySet="Product_Transaksi" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Transaksi__Produ__4CA06362" Association="Self.FK__Transaksi__Produ__4CA06362">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="Transaksi" EntitySet="Transaksi" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="mydatabase3Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Cart">
+          <Key>
+            <PropertyRef Name="id_Cart" />
+          </Key>
+          <Property Name="id_Cart" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="username_customer" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ProductCode" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Product" Relationship="Self.FK__Cart__ProductCod__4316F928" FromRole="Cart" ToRole="Product" />
+        </EntityType>
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="id_Customer" />
+          </Key>
+          <Property Name="id_Customer" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="email_customer" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="username_customer" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="password_customer" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="id_Employee" />
+          </Key>
+          <Property Name="id_Employee" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="email_employee" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="username_employee" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="password_employee" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="akses" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="ProductCode" />
+          </Key>
+          <Property Name="ProductCode" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ProductName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ProductPrice" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="ProductStock" Type="Int32" Nullable="false" />
+          <Property Name="ProductImage" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Carts" Relationship="Self.FK__Cart__ProductCod__4316F928" FromRole="Product" ToRole="Cart" />
+          <NavigationProperty Name="Product_Transaksi" Relationship="Self.FK__Product_T__Produ__47DBAE45" FromRole="Product" ToRole="Product_Transaksi" />
+          <NavigationProperty Name="Transaksis" Relationship="Self.FK__Transaksi__Produ__4CA06362" FromRole="Product" ToRole="Transaksi" />
+        </EntityType>
+        <EntityType Name="Product_Transaksi">
+          <Key>
+            <PropertyRef Name="id_ProductTransaksi" />
+          </Key>
+          <Property Name="id_ProductTransaksi" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="username_customer" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ProductCode" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <Property Name="date_time" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Product" Relationship="Self.FK__Product_T__Produ__47DBAE45" FromRole="Product_Transaksi" ToRole="Product" />
+        </EntityType>
+        <EntityType Name="Transaksi">
+          <Key>
+            <PropertyRef Name="id_Transaksi" />
+          </Key>
+          <Property Name="id_Transaksi" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="username_customer" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ProductCode" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <Property Name="SubTotal" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="date_time" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Product" Relationship="Self.FK__Transaksi__Produ__4CA06362" FromRole="Transaksi" ToRole="Product" />
+        </EntityType>
+        <Association Name="FK__Cart__ProductCod__4316F928">
+          <End Role="Product" Type="Self.Product" Multiplicity="1" />
+          <End Role="Cart" Type="Self.Cart" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="ProductCode" />
+            </Principal>
+            <Dependent Role="Cart">
+              <PropertyRef Name="ProductCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Product_T__Produ__47DBAE45">
+          <End Role="Product" Type="Self.Product" Multiplicity="1" />
+          <End Role="Product_Transaksi" Type="Self.Product_Transaksi" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="ProductCode" />
+            </Principal>
+            <Dependent Role="Product_Transaksi">
+              <PropertyRef Name="ProductCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Transaksi__Produ__4CA06362">
+          <End Role="Product" Type="Self.Product" Multiplicity="1" />
+          <End Role="Transaksi" Type="Self.Transaksi" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="ProductCode" />
+            </Principal>
+            <Dependent Role="Transaksi">
+              <PropertyRef Name="ProductCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="mydatabase3Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Carts" EntityType="Self.Cart" />
+          <EntitySet Name="Customers" EntityType="Self.Customer" />
+          <EntitySet Name="Employees" EntityType="Self.Employee" />
+          <EntitySet Name="Products" EntityType="Self.Product" />
+          <EntitySet Name="Product_Transaksi" EntityType="Self.Product_Transaksi" />
+          <EntitySet Name="Transaksis" EntityType="Self.Transaksi" />
+          <AssociationSet Name="FK__Cart__ProductCod__4316F928" Association="Self.FK__Cart__ProductCod__4316F928">
+            <End Role="Product" EntitySet="Products" />
+            <End Role="Cart" EntitySet="Carts" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Product_T__Produ__47DBAE45" Association="Self.FK__Product_T__Produ__47DBAE45">
+            <End Role="Product" EntitySet="Products" />
+            <End Role="Product_Transaksi" EntitySet="Product_Transaksi" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Transaksi__Produ__4CA06362" Association="Self.FK__Transaksi__Produ__4CA06362">
+            <End Role="Product" EntitySet="Products" />
+            <End Role="Transaksi" EntitySet="Transaksis" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="mydatabase3ModelStoreContainer" CdmEntityContainer="mydatabase3Entities">
+          <EntitySetMapping Name="Carts">
+            <EntityTypeMapping TypeName="mydatabase3Model.Cart">
+              <MappingFragment StoreEntitySet="Cart">
+                <ScalarProperty Name="id_Cart" ColumnName="id_Cart" />
+                <ScalarProperty Name="username_customer" ColumnName="username_customer" />
+                <ScalarProperty Name="ProductCode" ColumnName="ProductCode" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Customers">
+            <EntityTypeMapping TypeName="mydatabase3Model.Customer">
+              <MappingFragment StoreEntitySet="Customer">
+                <ScalarProperty Name="id_Customer" ColumnName="id_Customer" />
+                <ScalarProperty Name="email_customer" ColumnName="email_customer" />
+                <ScalarProperty Name="username_customer" ColumnName="username_customer" />
+                <ScalarProperty Name="password_customer" ColumnName="password_customer" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Employees">
+            <EntityTypeMapping TypeName="mydatabase3Model.Employee">
+              <MappingFragment StoreEntitySet="Employee">
+                <ScalarProperty Name="id_Employee" ColumnName="id_Employee" />
+                <ScalarProperty Name="email_employee" ColumnName="email_employee" />
+                <ScalarProperty Name="username_employee" ColumnName="username_employee" />
+                <ScalarProperty Name="password_employee" ColumnName="password_employee" />
+                <ScalarProperty Name="akses" ColumnName="akses" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Products">
+            <EntityTypeMapping TypeName="mydatabase3Model.Product">
+              <MappingFragment StoreEntitySet="Product">
+                <ScalarProperty Name="ProductCode" ColumnName="ProductCode" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="ProductPrice" ColumnName="ProductPrice" />
+                <ScalarProperty Name="ProductStock" ColumnName="ProductStock" />
+                <ScalarProperty Name="ProductImage" ColumnName="ProductImage" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Product_Transaksi">
+            <EntityTypeMapping TypeName="mydatabase3Model.Product_Transaksi">
+              <MappingFragment StoreEntitySet="Product_Transaksi">
+                <ScalarProperty Name="id_ProductTransaksi" ColumnName="id_ProductTransaksi" />
+                <ScalarProperty Name="username_customer" ColumnName="username_customer" />
+                <ScalarProperty Name="ProductCode" ColumnName="ProductCode" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="date_time" ColumnName="date_time" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Transaksis">
+            <EntityTypeMapping TypeName="mydatabase3Model.Transaksi">
+              <MappingFragment StoreEntitySet="Transaksi">
+                <ScalarProperty Name="id_Transaksi" ColumnName="id_Transaksi" />
+                <ScalarProperty Name="username_customer" ColumnName="username_customer" />
+                <ScalarProperty Name="ProductCode" ColumnName="ProductCode" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="SubTotal" ColumnName="SubTotal" />
+                <ScalarProperty Name="date_time" ColumnName="date_time" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

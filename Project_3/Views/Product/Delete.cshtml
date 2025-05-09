@@ -1,0 +1,44 @@
+﻿@model Project_3.Models.Product
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Apakah Anda yakin ingin menghapus produk ini?</h3>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>Nama Produk</dt>
+        <dd>@Html.DisplayFor(model => model.ProductName)</dd>
+
+        <dt>Jumlah Stok</dt>
+        <dd>@Html.DisplayFor(model => model.ProductStock)</dd>
+
+        <dt>Harga</dt>
+        <dd>@string.Format("{0:n0}", Model.ProductPrice)</dd>
+
+        <dt>Gambar</dt>
+        <dd>
+            @if (!string.IsNullOrEmpty(Model.ProductImage))
+            {
+                <img src="@Url.Content("~/Content/Images/" + Model.ProductImage)" width="120" /><br />
+                @Model.ProductImage
+            }
+            else
+            {
+                <span>(tidak ada gambar)</span>
+            }
+        </dd>
+    </dl>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-danger" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

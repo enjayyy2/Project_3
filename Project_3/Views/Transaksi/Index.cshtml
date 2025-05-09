@@ -1,0 +1,108 @@
+﻿@model Project_3.Models.Transaksi
+
+@{
+    ViewBag.Title = "Kasir - Transaksi";
+    Layout = "~/Views/Shared/Layout3.cshtml";
+}
+
+<h2 class="mt-3">Form Kasir</h2>
+<hr />
+
+@using (Html.BeginForm("Index", "Transaksi", FormMethod.Post))
+{
+    <div class="form-group mb-3">
+        @Html.LabelFor(m => m.username_customer, "Username")
+        @Html.TextBoxFor(m => m.username_customer, new { @class = "form-control", placeholder = "Masukkan Username" })
+    </div>
+    <div class="form-group mb-3">
+        @Html.Label("Product Code")
+        <input type="text" id="ProductCode" name="ProductCode" class="form-control" oninput="fetchProductDetails(this.value)" required />
+    </div>
+
+    <div class="form-group mb-3">
+        @Html.Label("Product Name")
+        <input type="text" id="ProductName" class="form-control" readonly />
+    </div>
+
+    <div class="form-group mb-3">
+        @Html.Label("Product Price")
+        <input type="number" id="ProductPrice" class="form-control" readonly />
+    </div>
+
+    <div class="form-group mb-3">
+        @Html.LabelFor(m => m.Quantity)
+        @Html.TextBoxFor(m => m.Quantity, new { @class = "form-control", type = "number", min = "1", id = "Quantity", oninput = "calculateSubtotal()" })
+    </div>
+
+    <div class="form-group mb-3">
+        @Html.LabelFor(m => m.SubTotal)
+        @Html.TextBoxFor(m => m.SubTotal, new { @class = "form-control", @readonly = "readonly", id = "Subtotal" })
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+}
+
+@if (TempData["Success"] != null)
+{
+    <script>alert('@TempData["Success"]');</script>
+}
+
+<hr />
+<h4 class="mt-4">Riwayat dari Tabel Product_Transaksi</h4>
+<table class="table table-bordered mt-3">
+    <thead class="table-light">
+        <tr>
+            <th>Username</th>
+            <th>Product Code</th>
+            <th>Quantity</th>
+            <th>Date Time</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in ViewBag.TransaksiList as List<Project_3.Models.Product_Transaksi>)
+        {
+            <tr>
+                <td>@item.username_customer</td>
+                <td>@item.ProductCode</td>
+                <td>@item.Quantity</td>
+                <td>@item.date_time.ToString("dd/MM/yyyy HH:mm")</td>
+                <td>
+                    @using (Html.BeginForm("RemoveProductTransaksi", "Transaksi", FormMethod.Post))
+                    {
+                        @Html.Hidden("id", item.id_ProductTransaksi)
+                        <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script>
+        function fetchProductDetails(code) {
+            if (!code) return;
+
+            fetch(`/Transaksi/GetProductByCode?productCode=${code}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data) {
+                        document.getElementById("ProductName").value = data.ProductName;
+                        document.getElementById("ProductPrice").value = data.ProductPrice;
+                        calculateSubtotal();
+                    } else {
+                        document.getElementById("ProductName").value = '';
+                        document.getElementById("ProductPrice").value = '';
+                        document.getElementById("Subtotal").value = '';
+                    }
+                });
+        }
+
+        function calculateSubtotal() {
+            const qty = parseInt(document.getElementById("Quantity").value) || 0;
+            const price = parseFloat(document.getElementById("ProductPrice").value) || 0;
+            document.getElementById("Subtotal").value = qty * price;
+        }
+    </script>
+}

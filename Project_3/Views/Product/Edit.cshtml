@@ -1,0 +1,59 @@
+﻿@model Project_3.Models.Product
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit</h2>
+
+@using (Html.BeginForm("Edit", "Product", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Product</h4>
+        <hr />
+
+        @Html.HiddenFor(model => model.ProductCode)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ProductName, htmlAttributes: new { @class = "control-label" })
+            @Html.TextBoxFor(model => model.ProductName, new { @class = "form-control" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ProductStock, htmlAttributes: new { @class = "control-label" })
+            @Html.TextBoxFor(model => model.ProductStock, new { @class = "form-control" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ProductPrice, htmlAttributes: new { @class = "control-label" })
+            @Html.TextBoxFor(model => model.ProductPrice, new { @class = "form-control" })
+        </div>
+
+        <div class="form-group">
+            <label>Gambar Saat Ini</label><br />
+            @if (!string.IsNullOrEmpty(Model.ProductImage))
+            {
+                <img src="@Url.Content("~/Content/Images/" + Model.ProductImage)" alt="gambar" width="150" />
+            }
+            else
+            {
+                <p>(tidak ada gambar)</p>
+            }
+        </div>
+
+        <div class="form-group">
+            <label>Gambar Baru</label>
+            <input type="file" name="ImageFile" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <input type="submit" value="Save" class="btn btn-primary" />
+        </div>
+
+        <div>
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    </div>
+}

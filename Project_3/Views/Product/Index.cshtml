@@ -1,0 +1,40 @@
+﻿@model IEnumerable<Project_3.Models.Product>
+@{
+    ViewBag.Title = "Product List - Admin";
+}
+
+<h2>Product List</h2>
+
+<p>
+    <a href="@Url.Action("Create", "Product")" class="btn btn-primary">Create New</a>
+</p>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Nama Produk</th>
+            <th>Stock</th>
+            <th>Price</th>
+            <th>Gambar</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.ProductName</td>
+                <td>@item.ProductStock</td>
+                <td>@String.Format(new System.Globalization.CultureInfo("id-ID"), "Rp.{0:N}", item.ProductPrice)</td>
+                <td>
+                    <img src="@Url.Content("~/Content/Images/" + item.ProductImage)" width="100" alt="gambar" />
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", "Product", new { id = item.ProductCode }, null) |
+                    @Html.ActionLink("Details", "Details", "Product", new { id = item.ProductCode }, null) |
+                    @Html.ActionLink("Delete", "Delete", "Product", new { id = item.ProductCode }, null)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

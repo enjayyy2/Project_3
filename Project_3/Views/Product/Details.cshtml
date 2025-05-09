@@ -1,0 +1,40 @@
+﻿@model Project_3.Models.Product
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<h3>product</h3>
+
+<div>
+    <dl class="dl-horizontal">
+        <dt>nama_product</dt>
+        <dd>@Html.DisplayFor(model => model.ProductName)</dd>
+
+        <dt>quantity</dt>
+        <dd>@Html.DisplayFor(model => model.ProductStock)</dd>
+
+        <dt>price</dt>
+        <dd>@string.Format("{0:n0}", Model.ProductPrice)</dd>
+
+        <dt>Gambar</dt>
+        <dd>
+            @if (!string.IsNullOrEmpty(Model.ProductImage))
+            {
+                <img src="@Url.Content("~/Content/Images/" + Model.ProductImage)" width="120" /><br />
+                @Model.ProductImage
+            }
+            else
+            {
+                <span>(tidak ada gambar)</span>
+            }
+        </dd>
+    </dl>
+</div>
+
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ProductCode }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

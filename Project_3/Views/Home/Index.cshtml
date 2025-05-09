@@ -1,0 +1,57 @@
+﻿@model IEnumerable<Project_3.Models.Product>
+
+@{
+    ViewBag.Title = "Our Products";
+    Layout = "~/Views/Shared/Layout2.cshtml";
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+<div class="text-center mt-5">
+    <h2>Our Products</h2>
+    <p class="text-muted">Find the best products with the best prices!</p>
+</div>
+
+<div class="container">
+    <div class="row">
+        @foreach (var product in Model)
+        {
+            <div class="col-md-3 mb-4">
+                <div class="card h-100 shadow-sm border-0">
+                    <img src="@Url.Content("~/Content/Images/" + product.ProductImage)" class="card-img-top img-fluid p-3" alt="@product.ProductName" style="height: 200px; object-fit: contain;">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">@product.ProductName</h5>
+                        <p class="card-text text-primary fw-bold">Rp @string.Format("{0:N}", product.ProductPrice)</p>
+
+                        @using (Html.BeginForm("AddToCart", "Cart", FormMethod.Post))
+                        {
+                            @Html.Hidden("productCode", product.ProductCode)
+
+                            <div class="d-flex justify-content-center align-items-center mb-2">
+                                <button type="button" class="btn btn-outline-secondary btn-sm me-1" onclick="changeQty(this, -1)">-</button>
+                                <input type="text" name="quantity" class="form-control text-center qty-input" value="1" style="width: 40px;" />
+                                <button type="button" class="btn btn-outline-secondary btn-sm ms-1" onclick="changeQty(this, 1)">+</button>
+                            </div>
+
+                            <button type="submit" class="btn btn-success w-100">
+                                Add to Cart
+                            </button>
+                        }
+
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+    function changeQty(button, delta) {
+        const input = button.parentElement.querySelector(".qty-input");
+        let value = parseInt(input.value) || 1;
+        value += delta;
+        if (value < 1) value = 1;
+        input.value = value;
+    }
+</script>
+

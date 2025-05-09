@@ -1,0 +1,67 @@
+﻿@model IEnumerable<Project_3.Models.CartDisplay>
+@{
+    ViewBag.Title = "Shopping Cart";
+    Layout = "~/Views/Shared/Layout2.cshtml";
+}
+
+<style>
+    /* Sembunyikan navbar */
+    .navbar {
+        display: none !important;
+    }
+</style>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between mb-3">
+        <a href="@Url.Action("Index", "Home")" class="btn btn-secondary">
+            <i class="fa fa-arrow-left"></i> Back
+        </a>
+        @using (Html.BeginForm("Checkout", "Cart", FormMethod.Post))
+        {
+            <button type="submit" class="btn btn-success">
+                Checkout <i class="fa fa-credit-card"></i>
+            </button>
+        }
+
+    </div>
+
+    <table class="table table-bordered table-hover">
+        <thead class="table-light">
+            <tr>
+                <th>Product Name</th>
+                <th>Product Code</th>
+                <th>Quantity</th>
+                <th style="width: 100px;">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.ProductName</td>
+                    <td>@item.ProductCode</td>
+                    <td>@item.Quantity</td>
+                    <td>
+                        @using (Html.BeginForm("RemoveFromCart", "Cart", FormMethod.Post))
+                        {
+                            @Html.Hidden("productCode", item.ProductCode)
+                            <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+

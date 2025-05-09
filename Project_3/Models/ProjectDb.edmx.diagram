@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="ea7384a7fb704df7a43f927df5630453" Name="Diagram1">
+        <EntityTypeShape EntityType="mydatabase3Model.Cart" Width="1.5" PointX="3" PointY="1.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="mydatabase3Model.Customer" Width="1.5" PointX="5.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="mydatabase3Model.Employee" Width="1.5" PointX="5.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="mydatabase3Model.Product" Width="1.5" PointX="0.75" PointY="4" IsExpanded="true" />
+        <EntityTypeShape EntityType="mydatabase3Model.Product_Transaksi" Width="1.5" PointX="3" PointY="4" IsExpanded="true" />
+        <EntityTypeShape EntityType="mydatabase3Model.Transaksi" Width="1.5" PointX="3" PointY="6.875" IsExpanded="true" />
+        <AssociationConnector Association="mydatabase3Model.FK__Cart__ProductCod__4316F928" ManuallyRouted="false" />
+        <AssociationConnector Association="mydatabase3Model.FK__Product_T__Produ__47DBAE45" ManuallyRouted="false" />
+        <AssociationConnector Association="mydatabase3Model.FK__Transaksi__Produ__4CA06362" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
