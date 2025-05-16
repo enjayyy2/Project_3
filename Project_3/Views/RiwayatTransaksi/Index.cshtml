@@ -1,0 +1,43 @@
+﻿@model IEnumerable<Project_3.Models.Transaksi>
+
+@{
+    ViewBag.Title = "Riwayat Transaksi";
+}
+
+<h2>Riwayat Transaksi</h2>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>ID Transaksi</th>
+            <th>Username</th>
+            <th>Kode Produk</th>
+            <th>Jumlah</th>
+            <th>Sub Total</th>
+            <th>Tanggal Transaksi</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.id_Transaksi</td>
+                    <td>@item.username_customer</td>
+                    <td>@item.ProductCode</td>
+                    <td>@item.Quantity</td>
+                    <td>@String.Format(new System.Globalization.CultureInfo("id-ID"), "Rp.{0:N}", item.SubTotal)</td>
+                    <td>@item.date_time.ToString("dd MMM yyyy HH:mm:ss")</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="6" class="text-center">Tidak ada data transaksi.</td>
+            </tr>
+        }
+    </tbody>
+</table>
+

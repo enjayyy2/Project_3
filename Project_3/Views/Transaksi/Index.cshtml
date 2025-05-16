@@ -11,35 +11,51 @@
 @using (Html.BeginForm("Index", "Transaksi", FormMethod.Post))
 {
     <div class="form-group mb-3">
-        @Html.LabelFor(m => m.username_customer, "Username")
-        @Html.TextBoxFor(m => m.username_customer, new { @class = "form-control", placeholder = "Masukkan Username" })
+        <label>ID Product Transaksi</label>
+        <div class="input-group">
+            <input type="number" id="idTransaksi" class="form-control" placeholder="Masukkan ID Product Transaksi" />
+            <button type="button" class="btn btn-primary" onclick="searchTransaksi()">Search</button>
+        </div>
     </div>
+
+    @* Hidden input untuk mengirim id_ProductTransaksi ke server saat submit *@
+    <input type="hidden" id="idTransaksi_hidden" name="idTransaksi" />
+
     <div class="form-group mb-3">
-        @Html.Label("Product Code")
-        <input type="text" id="ProductCode" name="ProductCode" class="form-control" oninput="fetchProductDetails(this.value)" required />
+        <label>Username</label>
+        <input type="text" id="username_customer_display" class="form-control" readonly />
+        <input type="hidden" id="username_customer" name="username_customer" />
     </div>
 
     <div class="form-group mb-3">
-        @Html.Label("Product Name")
+        <label>Product Code</label>
+        <input type="text" id="ProductCode_display" class="form-control" readonly />
+        <input type="hidden" id="ProductCode" name="ProductCode" />
+    </div>
+
+    <div class="form-group mb-3">
+        <label>Product Name</label>
         <input type="text" id="ProductName" class="form-control" readonly />
     </div>
 
     <div class="form-group mb-3">
-        @Html.Label("Product Price")
+        <label>Product Price</label>
         <input type="number" id="ProductPrice" class="form-control" readonly />
     </div>
 
     <div class="form-group mb-3">
-        @Html.LabelFor(m => m.Quantity)
-        @Html.TextBoxFor(m => m.Quantity, new { @class = "form-control", type = "number", min = "1", id = "Quantity", oninput = "calculateSubtotal()" })
+        <label>Quantity</label>
+        <input type="number" id="Quantity_display" class="form-control" readonly />
+        <input type="hidden" id="Quantity" name="Quantity" />
     </div>
 
     <div class="form-group mb-3">
-        @Html.LabelFor(m => m.SubTotal)
-        @Html.TextBoxFor(m => m.SubTotal, new { @class = "form-control", @readonly = "readonly", id = "Subtotal" })
+        <label>SubTotal</label>
+        <input type="number" id="SubTotal_display" class="form-control" readonly />
+        <input type="hidden" id="SubTotal" name="SubTotal" />
     </div>
 
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="submit" class="btn btn-success">Submit</button>
 }
 
 @if (TempData["Success"] != null)
@@ -52,28 +68,22 @@
 <table class="table table-bordered mt-3">
     <thead class="table-light">
         <tr>
+            <th>ID Transaksi</th>
             <th>Username</th>
             <th>Product Code</th>
             <th>Quantity</th>
             <th>Date Time</th>
-            <th>Action</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in ViewBag.TransaksiList as List<Project_3.Models.Product_Transaksi>)
         {
             <tr>
+                <td>@item.id_ProductTransaksi</td>
                 <td>@item.username_customer</td>
                 <td>@item.ProductCode</td>
                 <td>@item.Quantity</td>
                 <td>@item.date_time.ToString("dd/MM/yyyy HH:mm")</td>
-                <td>
-                    @using (Html.BeginForm("RemoveProductTransaksi", "Transaksi", FormMethod.Post))
-                    {
-                        @Html.Hidden("id", item.id_ProductTransaksi)
-                        <button type="submit" class="btn btn-danger btn-sm">Remove</button>
-                    }
-                </td>
             </tr>
         }
     </tbody>
@@ -81,28 +91,58 @@
 
 @section Scripts {
     <script>
-        function fetchProductDetails(code) {
-            if (!code) return;
+        function searchTransaksi() {
+            const id = $('#idTransaksi').val();
+            if (!id) return alert('Masukkan ID Product Transaksi terlebih dahulu');
 
-            fetch(`/Transaksi/GetProductByCode?productCode=${code}`)
-                .then(response => response.json())
-                .then(data => {
+            $.ajax({
+                url: '@Url.Action("GetProductTransaksiById", "Transaksi")',
+                type: 'GET',
+                data: { id: id },
+                success: function (data) {
                     if (data) {
-                        document.getElementById("ProductName").value = data.ProductName;
-                        document.getElementById("ProductPrice").value = data.ProductPrice;
-                        calculateSubtotal();
+                        $('#username_customer_display').val(data.username_customer);
+                        $('#username_customer').val(data.username_customer);
+
+                        $('#ProductCode_display').val(data.ProductCode);
+                        $('#ProductCode').val(data.ProductCode);
+
+                        $('#Quantity_display').val(data.Quantity);
+                        $('#Quantity').val(data.Quantity);
+
+                        $('#ProductName').val(data.ProductName);
+                        $('#ProductPrice').val(data.ProductPrice);
+
+                        const subtotal = data.Quantity * data.ProductPrice;
+                        $('#SubTotal_display').val(subtotal);
+                        $('#SubTotal').val(subtotal);
+
+                        // Set hidden input idTransaksi supaya terkirim saat submit
+                        $('#idTransaksi_hidden').val(id);
                     } else {
-                        document.getElementById("ProductName").value = '';
-                        document.getElementById("ProductPrice").value = '';
-                        document.getElementById("Subtotal").value = '';
+                        alert("ID tidak ditemukan!");
+                        clearFields();
                     }
-                });
+                },
+                error: function () {
+                    alert("ID yang kamu masukkan tidak ditemukan.");
+                    clearFields();
+                }
+            });
         }
 
-        function calculateSubtotal() {
-            const qty = parseInt(document.getElementById("Quantity").value) || 0;
-            const price = parseFloat(document.getElementById("ProductPrice").value) || 0;
-            document.getElementById("Subtotal").value = qty * price;
+        function clearFields() {
+            $('#username_customer_display').val('');
+            $('#username_customer').val('');
+            $('#ProductCode_display').val('');
+            $('#ProductCode').val('');
+            $('#ProductName').val('');
+            $('#ProductPrice').val('');
+            $('#Quantity_display').val('');
+            $('#Quantity').val('');
+            $('#SubTotal_display').val('');
+            $('#SubTotal').val('');
+            $('#idTransaksi_hidden').val('');
         }
     </script>
 }

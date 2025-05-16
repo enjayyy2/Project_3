@@ -84,6 +84,17 @@ namespace Project_3.Controllers
 
             if (cartItems.Any())
             {
+                // Validasi stok sebelum insert transaksi
+                foreach (var item in cartItems)
+                {
+                    var product = db.Products.FirstOrDefault(p => p.ProductCode == item.ProductCode);
+                    if (product == null || item.Quantity > product.ProductStock)
+                    {
+                        TempData["Error"] = $"Maaf stok untuk produk dengan kode {item.ProductCode} tidak cukup.";
+                        return RedirectToAction("Index");
+                    }
+                }
+
                 foreach (var item in cartItems)
                 {
                     var transaksi = new Product_Transaksi
@@ -109,6 +120,7 @@ namespace Project_3.Controllers
 
             return RedirectToAction("Index");
         }
+
 
     }
 }

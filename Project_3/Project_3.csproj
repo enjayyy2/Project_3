@@ -132,6 +132,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
+    <Compile Include="Controllers\RiwayatTransaksi.cs" />
     <Compile Include="Controllers\TransaksiController.cs" />
     <Compile Include="Models\Cart.cs">
       <DependentUpon>ProjectDb.tt</DependentUpon>
@@ -250,6 +251,7 @@
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Transaksi\Index.cshtml" />
     <Content Include="Views\Shared\Layout3.cshtml" />
+    <Content Include="Views\RiwayatTransaksi\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
