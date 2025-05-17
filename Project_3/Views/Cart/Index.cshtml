@@ -5,63 +5,81 @@
 }
 
 <style>
-    /* Sembunyikan navbar */
     .navbar {
         display: none !important;
+    }
+
+    .cart-container {
+        max-width: 960px;
+        margin: 0 auto;
+        padding-top: 20px;
+    }
+
+    .action-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .table th,
+    .table td {
+        vertical-align: middle !important;
+        text-align: center;
     }
 </style>
 
 @if (TempData["Success"] != null)
 {
-    <div class="alert alert-success">@TempData["Success"]</div>
+    <div class="alert alert-success text-center">@TempData["Success"]</div>
 }
 @if (TempData["Error"] != null)
 {
-    <div class="alert alert-danger">@TempData["Error"]</div>
+    <div class="alert alert-danger text-center">@TempData["Error"]</div>
 }
 
-
-<div class="container mt-4">
-    <div class="d-flex justify-content-between mb-3">
+<div class="container cart-container">
+    <div class="action-bar">
         <a href="@Url.Action("Index", "Home")" class="btn btn-secondary">
             <i class="fa fa-arrow-left"></i> Back
         </a>
-        @using (Html.BeginForm("Checkout", "Cart", FormMethod.Post))
-        {
-            <button type="submit" class="btn btn-success">
-                Checkout <i class="fa fa-credit-card"></i>
-            </button>
-        }
 
+        <button type="submit" form="checkoutForm" class="btn btn-success">
+            Checkout <i class="fa fa-credit-card"></i>
+        </button>
     </div>
 
-    <table class="table table-bordered table-hover">
-        <thead class="table-light">
-            <tr>
-                <th>Product Name</th>
-                <th>Product Code</th>
-                <th>Quantity</th>
-                <th style="width: 100px;">Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
+    @using (Html.BeginForm("Checkout", "Cart", FormMethod.Post, new { id = "checkoutForm" }))
+    {
+        <table class="table table-bordered table-striped table-hover">
+            <thead class="table-light">
                 <tr>
-                    <td>@item.ProductName</td>
-                    <td>@item.ProductCode</td>
-                    <td>@item.Quantity</td>
-                    <td>
-                        @using (Html.BeginForm("RemoveFromCart", "Cart", FormMethod.Post))
-                        {
-                            @Html.Hidden("productCode", item.ProductCode)
-                            <button type="submit" class="btn btn-danger btn-sm">Remove</button>
-                        }
-                    </td>
+                    <th style="width: 80px;">Select</th>
+                    <th>Product Name</th>
+                    <th>Product Code</th>
+                    <th>Quantity</th>
+                    <th style="width: 120px;">Action</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <input type="checkbox" name="selectedProducts" value="@item.ProductCode" />
+                        </td>
+                        <td>@item.ProductName</td>
+                        <td>@item.ProductCode</td>
+                        <td>@item.Quantity</td>
+                        <td>
+                            <form action="@Url.Action("RemoveFromCart", "Cart")" method="post" style="display:inline;">
+                                <input type="hidden" name="productCode" value="@item.ProductCode" />
+                                <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
 </div>
-
-

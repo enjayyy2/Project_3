@@ -78,46 +78,48 @@ namespace Project_3.Controllers
         }
 
         [HttpPost]
-        public ActionResult Checkout()
+        public ActionResult Checkout(string[] selectedProducts)
         {
-            var cartItems = db.Carts.ToList();
+            string username = Session["Username"]?.ToString();
 
-            if (cartItems.Any())
+            if (selectedProducts == null || selectedProducts.Length == 0)
             {
-                // Validasi stok sebelum insert transaksi
-                foreach (var item in cartItems)
-                {
-                    var product = db.Products.FirstOrDefault(p => p.ProductCode == item.ProductCode);
-                    if (product == null || item.Quantity > product.ProductStock)
-                    {
-                        TempData["Error"] = $"Maaf stok untuk produk dengan kode {item.ProductCode} tidak cukup.";
-                        return RedirectToAction("Index");
-                    }
-                }
-
-                foreach (var item in cartItems)
-                {
-                    var transaksi = new Product_Transaksi
-                    {
-                        username_customer = item.username_customer,
-                        ProductCode = item.ProductCode,
-                        Quantity = item.Quantity,
-                        date_time = DateTime.Now
-                    };
-
-                    db.Product_Transaksi.Add(transaksi);
-                }
-
-                db.Carts.RemoveRange(cartItems); // Hapus semua isi cart
-                db.SaveChanges();
-
-                TempData["Success"] = "Checkout berhasil, data telah dimasukkan ke dalam transaksi!";
-            }
-            else
-            {
-                TempData["Error"] = "Keranjang kosong!";
+                TempData["Error"] = "Silakan pilih setidaknya satu produk untuk checkout.";
+                return RedirectToAction("Index");
             }
 
+            var cartItems = db.Carts
+                              .Where(c => c.username_customer == username && selectedProducts.Contains(c.ProductCode))
+                              .ToList();
+
+            // Validasi stok
+            foreach (var item in cartItems)
+            {
+                var product = db.Products.FirstOrDefault(p => p.ProductCode == item.ProductCode);
+                if (product == null || item.Quantity > product.ProductStock)
+                {
+                    TempData["Error"] = $"Maaf, stok untuk produk {item.ProductCode} tidak mencukupi.";
+                    return RedirectToAction("Index");
+                }
+            }
+
+            // Tambahkan ke transaksi
+            foreach (var item in cartItems)
+            {
+                var transaksi = new Product_Transaksi
+                {
+                    username_customer = item.username_customer,
+                    ProductCode = item.ProductCode,
+                    Quantity = item.Quantity,
+                    date_time = DateTime.Now
+                };
+                db.Product_Transaksi.Add(transaksi);
+            }
+
+            db.Carts.RemoveRange(cartItems);
+            db.SaveChanges();
+
+            TempData["Success"] = "Checkout berhasil untuk produk yang dipilih!";
             return RedirectToAction("Index");
         }
 
